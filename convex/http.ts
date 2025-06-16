@@ -32,8 +32,8 @@ http.route({
         try {
             evt = wh.verify(body, {
                 "svix-id": svix_id,
-                "svix-signature": svix_signature,
                 "svix-timestamp": svix_timestamp,
+                "svix-signature": svix_signature,
             }) as any;
         } catch (err) {
             console.error("Error verifying webhook:", err);
@@ -45,7 +45,7 @@ http.route({
         if(eventType === "user.created") {
             const { id, email_addresses, first_name, last_name, image_url} = evt.data;
 
-            const email = email_addresses[0].email_addresses;
+            const email = email_addresses[0].email_address;
             const name = `${first_name || ""} ${last_name || ""}`.trim();
 
             try {
@@ -64,3 +64,5 @@ http.route({
         return new Response("Webhook processed successfully", {status: 200})
     })
 })
+
+export default http;

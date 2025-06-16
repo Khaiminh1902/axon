@@ -14,7 +14,7 @@ http.route({
             throw new Error("Missing CLERK_WEBHOOK_SECRET environment variable");
         }
         const svix_id = request.headers.get("svix-id");
-        const svix_signature = request.headers.get("svix_signature");
+        const svix_signature = request.headers.get("svix-signature");
         const svix_timestamp = request.headers.get("svix-timestamp");
 
         if (!svix_id || !svix_signature || !svix_timestamp) {

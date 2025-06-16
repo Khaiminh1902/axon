@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "app1",
-    "slug": "app1",
+    "name": "axon",
+    "slug": "axon",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "app1",
+    "scheme": "axon",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

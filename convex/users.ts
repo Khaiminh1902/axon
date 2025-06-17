@@ -1,5 +1,5 @@
-import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 
 export const createUser = mutation({
     args: {
@@ -31,4 +31,46 @@ export const createUser = mutation({
             posts: 0,
         })
     }
+});
+
+export async function getAuthenticatedUser(ctx: QueryCtx | MutationCtx) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const currentUser = await ctx.db
+    .query("users")
+    .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+    .first()
+
+    if(!currentUser) throw new Error("User not found")
+    return currentUser;
+}
+export const getUserByClerkId = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+
+    if (!user) throw new Error("User not found ");
+
+    return {
+      _id: user._id,
+      fullname: user.fullname,
+      image: user.image,
+    };
+  },
+});
+
+export const getUser = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId);
+    if (!user) throw new ConvexError("User not found");
+    return {
+      fullname: user.fullname,
+      image: user.image,
+    };
+  },
 });

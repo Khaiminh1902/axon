@@ -110,6 +110,7 @@ export const styles = StyleSheet.create({
     flex: 1 / 3,
     aspectRatio: 1,
     padding: 1,
+    paddingBottom: 40,
   },
   gridImage: {
     flex: 1,

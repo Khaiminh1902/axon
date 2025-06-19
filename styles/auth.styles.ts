@@ -24,7 +24,6 @@ export const styles = StyleSheet.create({
   appName: {
     fontSize: 42,
     fontWeight: "700",
-    fontFamily: "JetBrainsMono-Medium",
     color: COLORS.primary,
     letterSpacing: 0.5,
     marginBottom: 8,
@@ -89,5 +88,5 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.grey,
     maxWidth: 280,
-    },
+  },
 });

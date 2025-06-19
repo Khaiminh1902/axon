@@ -30,7 +30,7 @@ type PostProps = {
   };
 };
 
-export default function Post({ post }: PostProps) {
+export default function PostForOthers({ post }: PostProps) {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked);
   const [localLikesCount, setLocalLikesCount] = useState(post.likes);
@@ -74,14 +74,7 @@ export default function Post({ post }: PostProps) {
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
-        <Link
-          href={
-            currentUser?._id === post.author._id
-              ? "/(tabs)/profile"
-              : `/user/${post.author._id}`
-          }
-          asChild
-        >
+        <Link href={"/(tabs)/notifications"}>
           <TouchableOpacity style={styles.postHeaderLeft}>
             <Image
               source={post.author.image}

@@ -8,7 +8,8 @@ import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
 import { Image } from "expo-image";
-import React, { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Keyboard,
@@ -30,10 +31,23 @@ export default function Profile() {
     userId ? { clerkId: userId } : "skip"
   );
   const [editedProfile, setEditedProfile] = useState({
-    fullname: currentUser?.fullname || "",
-    username: currentUser?.username || "",
-    bio: currentUser?.bio || "",
+    fullname: "",
+    username: "",
+    bio: "",
+    image: "",
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setEditedProfile({
+        fullname: currentUser.fullname || "",
+        username: currentUser.username || "",
+        bio: currentUser.bio || "",
+        image: currentUser.image || "",
+      });
+    }
+  }, [currentUser]);
+
   const [selectedPost, setSelectedPost] = useState<Doc<"posts"> | null>(null);
   const posts = useQuery(api.posts.getPostsByUser, {});
   const updateProfile = useMutation(api.users.updateProfile);
@@ -41,6 +55,20 @@ export default function Profile() {
   const handleSaveProfile = async () => {
     await updateProfile(editedProfile);
     setIsEditModalVisible(false);
+  };
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      setEditedProfile((prev) => ({ ...prev, image: uri }));
+    }
   };
 
   if (!currentUser || posts === undefined) return <Loader />;
@@ -57,7 +85,6 @@ export default function Profile() {
           </TouchableOpacity>
         </View>
       </View>
-
       <FlatList
         ListHeaderComponent={
           <View style={styles.profileInfo}>
@@ -156,6 +183,18 @@ export default function Profile() {
                   <Ionicons name="close" size={24} color={COLORS.white} />
                 </TouchableOpacity>
               </View>
+              <Text style={styles.changeText}>Profile Picture</Text>
+              <TouchableOpacity
+                onPress={handlePickImage}
+                style={styles.imagePicker}
+              >
+                <Image
+                  source={editedProfile.image}
+                  style={styles.imagePickerImage}
+                  contentFit="cover"
+                />
+              </TouchableOpacity>
+
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Name</Text>
                 <TextInput
@@ -214,7 +253,7 @@ function NoPostsFound() {
           fontSize: 20,
           color: COLORS.grey,
           paddingTop: 5,
-          fontWeight: 600,
+          fontWeight: "600",
         }}
       >
         No posts yet

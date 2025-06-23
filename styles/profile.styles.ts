@@ -239,4 +239,23 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.white,
   },
+  imagePicker: {
+    alignSelf: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  imagePickerImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+
+  changeText: {
+    color: COLORS.grey,
+    marginBottom: 10,
+    fontSize: 14,
+  },
 });

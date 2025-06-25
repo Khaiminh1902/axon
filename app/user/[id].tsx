@@ -1,5 +1,5 @@
 import Loader from "@/components/Loader";
-import PostForOthers from "@/components/PostForOthers";
+import Post from "@/components/Post";
 import { COLORS } from "@/constants/theme";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -88,7 +88,7 @@ export default function UserProfileScreen() {
         }
         ListEmptyComponent={<NoPostsFound />}
         data={posts}
-        renderItem={({ item }) => <PostForOthers post={item} />}
+        renderItem={({ item }) => <Post post={item} />}
         keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 60 }}

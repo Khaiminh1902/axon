@@ -28,20 +28,25 @@ type PostProps = {
       image: string;
     };
   };
+  linkTo?: string;
 };
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post, linkTo }: PostProps) {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked);
   const [localLikesCount, setLocalLikesCount] = useState(post.likes);
   const [showComments, setShowComments] = useState(false);
+
   const liveLikesCount = useQuery(api.posts.getPostLikesCount, {
     postId: post._id,
   });
+
   const likesCount = liveLikesCount ?? localLikesCount;
+
   const toggleLike = useMutation(api.posts.toggleLike);
   const toggleBookmark = useMutation(api.bookmarks.toggleBookmark);
   const deletePost = useMutation(api.posts.deletePost);
+
   const { user } = useUser();
   const currentUser = useQuery(
     api.users.getUserByClerkId,
@@ -59,8 +64,12 @@ export default function Post({ post }: PostProps) {
   };
 
   const handleBookmark = async () => {
-    const newIsBookmarked = await toggleBookmark({ postId: post._id });
-    setIsBookmarked(newIsBookmarked);
+    try {
+      const newIsBookmarked = await toggleBookmark({ postId: post._id });
+      setIsBookmarked(newIsBookmarked);
+    } catch (error) {
+      console.log("Error toggling bookmark: ", error);
+    }
   };
 
   const handleDelete = async () => {
@@ -76,9 +85,11 @@ export default function Post({ post }: PostProps) {
       <View style={styles.postHeader}>
         <Link
           href={
-            currentUser?._id === post.author._id
-              ? "/(tabs)/profile"
-              : `/user/${post.author._id}`
+            linkTo
+              ? (linkTo as any)
+              : currentUser?._id === post.author._id
+                ? "/(tabs)/profile"
+                : `/user/${post.author._id}`
           }
           asChild
         >
@@ -93,14 +104,14 @@ export default function Post({ post }: PostProps) {
             <Text style={styles.postUsername}>{post.author.username}</Text>
           </TouchableOpacity>
         </Link>
-        {post.author._id === currentUser?._id ? (
+
+        {post.author._id === currentUser?._id && (
           <TouchableOpacity onPress={handleDelete}>
             <Ionicons name="trash-outline" size={20} color={COLORS.primary} />
           </TouchableOpacity>
-        ) : (
-          ""
         )}
       </View>
+
       <Image
         source={post.imageUrl}
         style={styles.postImage}
@@ -118,6 +129,7 @@ export default function Post({ post }: PostProps) {
               color={isLiked ? COLORS.primary : COLORS.white}
             />
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => setShowComments(true)}>
             <Ionicons
               name="chatbubble-outline"
@@ -126,6 +138,7 @@ export default function Post({ post }: PostProps) {
             />
           </TouchableOpacity>
         </View>
+
         <TouchableOpacity onPress={handleBookmark}>
           <Ionicons
             name={isBookmarked ? "bookmark" : "bookmark-outline"}
@@ -141,11 +154,13 @@ export default function Post({ post }: PostProps) {
             ? `${likesCount.toLocaleString()} like`
             : `${likesCount.toLocaleString()} likes`}
         </Text>
+
         {post.caption && (
           <View style={styles.captionContainer}>
             <Text style={styles.captionText}>{post.caption}</Text>
           </View>
         )}
+
         {post.comments > 0 && (
           <TouchableOpacity onPress={() => setShowComments(true)}>
             <Text style={styles.commentText}>
@@ -153,10 +168,12 @@ export default function Post({ post }: PostProps) {
             </Text>
           </TouchableOpacity>
         )}
+
         <Text style={styles.timeAgo}>
           {formatDistanceToNow(post._creationTime, { addSuffix: true })}
         </Text>
       </View>
+
       <CommentsModal
         postId={post._id}
         visible={showComments}

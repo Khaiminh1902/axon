@@ -52,7 +52,6 @@ Join our community of developers creating universal apps.
 TODOS:
 
 - The toggle button (likes, bookmarks) on different pages not synced
-- Function to change profile picture
 - The stories section
 - Add friend functionality
 - Friends page

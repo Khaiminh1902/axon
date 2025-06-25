@@ -11,7 +11,6 @@ export const createUser = mutation({
     email: v.string(),
     clerkId: v.string(),
   },
-
   handler: async (ctx, args) => {
     const existingUser = await ctx.db
       .query("users")
@@ -55,7 +54,7 @@ export const getUserByClerkId = query({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
       .first();
 
-    if (!user) throw new Error("User not found ");
+    if (!user) throw new Error("User not found");
 
     return user;
   },
@@ -80,7 +79,6 @@ export const updateProfile = mutation({
     bio: v.optional(v.string()),
     image: v.optional(v.string()),
   },
-
   handler: async (ctx, args) => {
     const currentUser = await getAuthenticatedUser(ctx);
 
@@ -147,6 +145,40 @@ export const toggleFollow = mutation({
         type: "follow",
       });
     }
+  },
+});
+
+export const updateProfilePicture = mutation({
+  args: {
+    imageUrl: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedUser(ctx);
+    if (!user) throw new Error("Unauthorized");
+
+    await ctx.db.patch(user._id, {
+      image: args.imageUrl,
+    });
+  },
+});
+
+export const generateUploadUrl = mutation(async (ctx) => {
+  return await ctx.storage.generateUploadUrl();
+});
+
+export const saveProfileImage = mutation({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, { storageId }) => {
+    const user = await getAuthenticatedUser(ctx);
+    const url = await ctx.storage.getUrl(storageId);
+
+    if (!url) throw new Error("Failed to retrieve image URL");
+
+    await ctx.db.patch(user._id, {
+      image: url,
+    });
   },
 });
 

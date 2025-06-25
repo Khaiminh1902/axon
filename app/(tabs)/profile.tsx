@@ -8,7 +8,6 @@ import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
 import { Image } from "expo-image";
-import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -55,20 +54,6 @@ export default function Profile() {
   const handleSaveProfile = async () => {
     await updateProfile(editedProfile);
     setIsEditModalVisible(false);
-  };
-
-  const handlePickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      setEditedProfile((prev) => ({ ...prev, image: uri }));
-    }
   };
 
   if (!currentUser || posts === undefined) return <Loader />;
@@ -184,19 +169,15 @@ export default function Profile() {
                 </TouchableOpacity>
               </View>
               <Text style={styles.changeText}>Profile Picture</Text>
-              <TouchableOpacity
-                onPress={handlePickImage}
-                style={styles.imagePicker}
-              >
+              <TouchableOpacity style={styles.imagePicker}>
                 <Image
                   source={editedProfile.image}
                   style={styles.imagePickerImage}
                   contentFit="cover"
                 />
               </TouchableOpacity>
-
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Name</Text>
+                <Text style={styles.inputLabel}>Name </Text>
                 <TextInput
                   style={styles.input}
                   value={editedProfile.fullname}
@@ -207,7 +188,7 @@ export default function Profile() {
                 />
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Username</Text>
+                <Text style={styles.inputLabel}>Username </Text>
                 <TextInput
                   style={styles.input}
                   value={editedProfile.username}

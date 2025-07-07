@@ -14,13 +14,16 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderBottomWidth: 1,
+    borderBottomWidth: 3,
     borderBottomColor: COLORS.surface,
   },
   headerTitle: {
     fontWeight: "700",
     fontSize: 24,
     color: COLORS.primary,
+  },
+  chatTitle: {
+    color: COLORS.white,
   },
   storiesContainer: {
     paddingVertical: 12,
@@ -196,10 +199,10 @@ export const styles = StyleSheet.create({
     borderTopColor: COLORS.surface,
     backgroundColor: COLORS.background,
   },
-    commentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  commentHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   input: {
     flex: 1,

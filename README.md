@@ -53,6 +53,5 @@ TODOS:
 
 - The toggle button (likes, bookmarks) on different pages not synced
 - The stories section
-- Add friend functionality
-- Friends page
 - Messaging capability
+- change pic function not working for other users

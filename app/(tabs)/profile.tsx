@@ -108,13 +108,6 @@ export default function Profile() {
               >
                 <Text style={styles.editButtonText}>Edit Profile</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.shareButton}>
-                <Ionicons
-                  name="person-add-outline"
-                  size={20}
-                  color={COLORS.white}
-                />
-              </TouchableOpacity>
             </View>
           </View>
         }

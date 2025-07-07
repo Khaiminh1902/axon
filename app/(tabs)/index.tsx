@@ -5,7 +5,9 @@ import { COLORS } from "@/constants/theme";
 import { api } from "@/convex/_generated/api";
 import { styles } from "@/styles/feed.styles";
 import { useAuth } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
+import { Link } from "expo-router";
 import { useState } from "react";
 import { FlatList, RefreshControl, Text, View } from "react-native";
 
@@ -27,7 +29,16 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>AXON </Text>
+        <Text style={styles.headerTitle}>AXON</Text>
+        <View style={{ flexDirection: "row", gap: 16 }}>
+          <Link href={`/(messaging)`} asChild>
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={24}
+              color={COLORS.primary}
+            />
+          </Link>
+        </View>
       </View>
       <FlatList
         refreshControl={

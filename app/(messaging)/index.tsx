@@ -9,6 +9,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Menu, Provider } from "react-native-paper";
+import Chat from "./chat";
 
 export default function Index() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function Index() {
 
         {/* Main Content */}
         <View>
-          <Text style={styles.chatTitle}>Chat</Text>
+          <Chat />
         </View>
       </View>
     </Provider>

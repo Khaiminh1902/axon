@@ -7,9 +7,15 @@ import { styles } from "@/styles/feed.styles";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, RefreshControl, Text, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Index() {
   useAuth();
@@ -25,20 +31,27 @@ export default function Index() {
       setRefreshing(false);
     }, 2000);
   };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const router = useRouter();
+
+  const navigateToMessaging = () => {
+    router.push("/(messaging)");
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>AXON</Text>
-        <View style={{ flexDirection: "row", gap: 16 }}>
-          <Link href={`/(messaging)`} asChild>
-            <Ionicons
-              name="chatbubble-ellipses-outline"
-              size={24}
-              color={COLORS.primary}
-            />
-          </Link>
-        </View>
+        <TouchableOpacity
+          style={{ flexDirection: "row", gap: 16 }}
+          onPress={navigateToMessaging}
+        >
+          <Ionicons
+            name="chatbubble-ellipses-outline"
+            size={24}
+            color={COLORS.primary}
+          />
+        </TouchableOpacity>
       </View>
       <FlatList
         refreshControl={
